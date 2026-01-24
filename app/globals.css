@@ -1,26 +1,508 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Wedding color palette - extracted from rose images */
+  --background: #fdfbfa;
+  --foreground: #4a4a4a;
+  --rose-primary: #d4a5a5;
+  --rose-dark: #c08b8b;
+  --rose-light: #e8c5c5;
+  --text-muted: #8b8b8b;
+  --tan-accent: #c9b1a0;
+  --gold-accent: #b8956b;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-playfair: var(--font-playfair);
+  --font-great-vibes: var(--font-great-vibes);
+  --font-cormorant: var(--font-cormorant);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-cormorant), Georgia, serif;
+  overflow-x: hidden;
+}
+
+/* Custom transition duration for page fade-in */
+.duration-1500 {
+  transition-duration: 1500ms;
+}
+
+/* Rose fly-in animations */
+@keyframes flyInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes flyInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.animate-fly-in-right {
+  animation: flyInFromRight 1.2s ease-out forwards;
+}
+
+.animate-fly-in-left {
+  animation: flyInFromLeft 1.2s ease-out forwards;
+}
+
+/* Elegant typography */
+.font-playfair {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+.font-great-vibes {
+  font-family: var(--font-great-vibes), cursive;
+}
+
+.font-cormorant {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+/* Wedding text colors */
+.text-rose {
+  color: var(--rose-primary);
+}
+
+.text-rose-dark {
+  color: var(--rose-dark);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* Petal float animations - from corners toward center with path variations */
+
+/* Top-right path variation 1 - curves left then straightens */
+@keyframes floatFromTopRight1 {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  5% { opacity: 0.9; }
+  20% {
+    transform: translate(-8vw, 8vh) rotate(45deg) scale(0.97);
+  }
+  40% {
+    transform: translate(-20vw, 18vh) rotate(120deg) scale(0.93);
+  }
+  60% {
+    transform: translate(-28vw, 30vh) rotate(200deg) scale(0.88);
+  }
+  80% {
+    transform: translate(-34vw, 42vh) rotate(290deg) scale(0.83);
+  }
+  95% { opacity: 0.7; }
+  100% {
+    transform: translate(-38vw, 48vh) rotate(360deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Top-right path variation 2 - more horizontal drift with sway */
+@keyframes floatFromTopRight2 {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  5% { opacity: 0.9; }
+  15% {
+    transform: translate(-10vw, 5vh) rotate(30deg) scale(0.98);
+  }
+  30% {
+    transform: translate(-18vw, 14vh) rotate(80deg) scale(0.94);
+  }
+  45% {
+    transform: translate(-24vw, 22vh) rotate(150deg) scale(0.9);
+  }
+  60% {
+    transform: translate(-28vw, 32vh) rotate(220deg) scale(0.86);
+  }
+  75% {
+    transform: translate(-33vw, 40vh) rotate(290deg) scale(0.82);
+  }
+  95% { opacity: 0.6; }
+  100% {
+    transform: translate(-36vw, 46vh) rotate(380deg) scale(0.78);
+    opacity: 0;
+  }
+}
+
+/* Top-right path variation 3 - more vertical with gentle S-curve */
+@keyframes floatFromTopRight3 {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  5% { opacity: 0.85; }
+  25% {
+    transform: translate(-6vw, 15vh) rotate(70deg) scale(0.95);
+  }
+  50% {
+    transform: translate(-16vw, 28vh) rotate(160deg) scale(0.88);
+  }
+  75% {
+    transform: translate(-28vw, 40vh) rotate(260deg) scale(0.82);
+  }
+  95% { opacity: 0.65; }
+  100% {
+    transform: translate(-35vw, 50vh) rotate(340deg) scale(0.75);
+    opacity: 0;
+  }
+}
+
+/* Bottom-left path variation 1 - curves right then straightens */
+@keyframes floatFromBottomLeft1 {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  5% { opacity: 0.9; }
+  20% {
+    transform: translate(8vw, -8vh) rotate(-45deg) scale(0.97);
+  }
+  40% {
+    transform: translate(20vw, -18vh) rotate(-120deg) scale(0.93);
+  }
+  60% {
+    transform: translate(28vw, -30vh) rotate(-200deg) scale(0.88);
+  }
+  80% {
+    transform: translate(34vw, -42vh) rotate(-290deg) scale(0.83);
+  }
+  95% { opacity: 0.7; }
+  100% {
+    transform: translate(38vw, -48vh) rotate(-360deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Bottom-left path variation 2 - more horizontal drift with sway */
+@keyframes floatFromBottomLeft2 {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  5% { opacity: 0.9; }
+  15% {
+    transform: translate(10vw, -5vh) rotate(-30deg) scale(0.98);
+  }
+  30% {
+    transform: translate(18vw, -14vh) rotate(-80deg) scale(0.94);
+  }
+  45% {
+    transform: translate(24vw, -22vh) rotate(-150deg) scale(0.9);
+  }
+  60% {
+    transform: translate(28vw, -32vh) rotate(-220deg) scale(0.86);
+  }
+  75% {
+    transform: translate(33vw, -40vh) rotate(-290deg) scale(0.82);
+  }
+  95% { opacity: 0.6; }
+  100% {
+    transform: translate(36vw, -46vh) rotate(-380deg) scale(0.78);
+    opacity: 0;
+  }
+}
+
+/* Bottom-left path variation 3 - more vertical with gentle S-curve */
+@keyframes floatFromBottomLeft3 {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  5% { opacity: 0.85; }
+  25% {
+    transform: translate(6vw, -15vh) rotate(-70deg) scale(0.95);
+  }
+  50% {
+    transform: translate(16vw, -28vh) rotate(-160deg) scale(0.88);
+  }
+  75% {
+    transform: translate(28vw, -40vh) rotate(-260deg) scale(0.82);
+  }
+  95% { opacity: 0.65; }
+  100% {
+    transform: translate(35vw, -50vh) rotate(-340deg) scale(0.75);
+    opacity: 0;
+  }
+}
+
+/* Rose corner sway animations - subtle movement at the ends */
+@keyframes roseSwayRight {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(1.5deg);
+  }
+}
+
+@keyframes roseSwayLeft {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-1.5deg);
+  }
+}
+
+/* Rose sway classes */
+.rose-sway-right {
+  transform-origin: top right;
+  animation: roseSwayRight 4s ease-in-out infinite;
+}
+
+.rose-sway-left {
+  transform-origin: bottom left;
+  animation: roseSwayLeft 4.5s ease-in-out infinite;
+}
+
+/* Petal animation classes with path variations */
+.petal-float-tr-1 {
+  animation: floatFromTopRight1 var(--petal-duration, 10s) ease-in-out infinite;
+  animation-delay: var(--petal-delay, 0s);
+}
+
+.petal-float-tr-2 {
+  animation: floatFromTopRight2 var(--petal-duration, 10s) ease-in-out infinite;
+  animation-delay: var(--petal-delay, 0s);
+}
+
+.petal-float-tr-3 {
+  animation: floatFromTopRight3 var(--petal-duration, 10s) ease-in-out infinite;
+  animation-delay: var(--petal-delay, 0s);
+}
+
+.petal-float-bl-1 {
+  animation: floatFromBottomLeft1 var(--petal-duration, 10s) ease-in-out infinite;
+  animation-delay: var(--petal-delay, 0s);
+}
+
+.petal-float-bl-2 {
+  animation: floatFromBottomLeft2 var(--petal-duration, 10s) ease-in-out infinite;
+  animation-delay: var(--petal-delay, 0s);
+}
+
+.petal-float-bl-3 {
+  animation: floatFromBottomLeft3 var(--petal-duration, 10s) ease-in-out infinite;
+  animation-delay: var(--petal-delay, 0s);
+}
+
+/* Petal base styling */
+.petal {
+  position: absolute;
+  pointer-events: none;
+  z-index: 5;
+  will-change: transform, opacity;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Countdown box styling */
+.countdown-box {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.countdown-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(212, 165, 165, 0.2);
+}
+
+/* Location card styling */
+.location-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.location-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Info card styling */
+.info-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Section fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Timeline styling improvements */
+@media (max-width: 640px) {
+  .timeline-item {
+    padding-left: 1rem;
+  }
+}
+
+/* Button hover states */
+a[style*="backgroundColor: rgb(212, 165, 165)"],
+a[style*="backgroundColor: #d4a5a5"] {
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+a[style*="backgroundColor: rgb(212, 165, 165)"]:active,
+a[style*="backgroundColor: #d4a5a5"]:active {
+  transform: scale(0.98);
+}
+
+/* Map iframe responsive styling */
+.location-card iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+}
+
+@media (min-width: 768px) {
+  .location-card iframe {
+    min-height: 200px;
+  }
+}
+
+/* Responsive text adjustments for schedule */
+@media (max-width: 400px) {
+  .schedule-time {
+    font-size: 1rem;
+  }
+  
+  .schedule-event {
+    font-size: 0.875rem;
+  }
+}
+
+/* Ensure sections have good spacing on mobile */
+section {
+  scroll-margin-top: 2rem;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rose-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rose-primary);
+}
+
+/* Photo Gallery Styles */
+
+/* Gallery item hover effect */
+.gallery-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-4px);
+}
+
+.gallery-item img {
+  transition: transform 0.4s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.03);
+}
+
+/* Masonry layout adjustments */
+@media (max-width: 640px) {
+  .columns-2 {
+    column-gap: 0.75rem;
+  }
+  
+  .gallery-item {
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Lightbox animations */
+@keyframes lightboxFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightboxScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Upload drop zone styles */
+.upload-dropzone {
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.upload-dropzone.dragging {
+  border-color: var(--rose-primary);
+  background-color: rgba(212, 165, 165, 0.1);
+}
+
+/* Progress bar animation */
+@keyframes progressPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.upload-progress {
+  animation: progressPulse 1.5s ease-in-out infinite;
 }
