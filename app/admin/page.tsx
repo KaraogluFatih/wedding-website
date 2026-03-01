@@ -852,7 +852,7 @@ export default function AdminPage() {
       }
     } catch (err) {
       console.error('Push toggle error:', err);
-      alert('Push-Benachrichtigungen konnten nicht aktiviert werden.');
+      alert(`Push-Fehler: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
 
