@@ -3,8 +3,8 @@ self.addEventListener('push', event => {
   event.waitUntil(
     self.registration.showNotification(data.title || 'Neue Bestellung', {
       body: data.body || '',
-      icon: '/Rose-Right-Corner.png',
-      badge: '/Rose-Right-Corner.png',
+      icon: '/wedding-visicon.png',
+      badge: '/wedding-visicon.png',
       data: { url: '/admin' },
     })
   );
