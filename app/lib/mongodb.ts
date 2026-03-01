@@ -1,4 +1,4 @@
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient, Db, ObjectId } from 'mongodb';
 
 const uri = process.env.MONGODB_URI;
 const options = {};
@@ -58,4 +58,54 @@ export interface Photo {
   filename: string;
   size: number;
   uploaded_at: Date;
+}
+
+// Schedule/Timeline interface
+export interface ScheduleItem {
+  _id?: ObjectId;
+  order: number;
+  time: string;
+  event: string;
+  emoji: string;
+  isBreak: boolean;
+}
+
+// Venue/Location interface
+export interface Venue {
+  _id?: ObjectId;
+  order: number;
+  name: string;
+  subtitle: string;
+  address: string;
+  city: string;
+  mapsUrl: string;
+  embedUrl: string;
+}
+
+// Menu item interface
+export interface MenuItem {
+  _id?: ObjectId;
+  type: 'food' | 'drink';
+  category: string;
+  id: string;             // slug used in orders — never change after seeding
+  name: string;
+  description: string;
+  order: number;
+}
+
+// Guest interface
+export interface Guest {
+  _id?: ObjectId;
+  name: string;
+  family: string;
+  order: number;
+}
+
+// Seating arrangement interface (single document)
+export interface Seating {
+  _id?: ObjectId;
+  bride: string;
+  groom: string;
+  bridesSide: string[];
+  groomsSide: string[];
 }

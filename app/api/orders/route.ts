@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase, Order } from '../../lib/mongodb';
+import { sendPushToAll } from '../../lib/push';
 
 // GET all orders or a specific order by guest_name
 export async function GET(request: NextRequest) {
@@ -61,6 +62,12 @@ export async function POST(request: NextRequest) {
       },
       { upsert: true }
     );
+
+    // Fire-and-forget push notification to admin
+    sendPushToAll(
+      '🍽️ Neue Bestellung',
+      `${guest_name} hat bestellt: ${main_course ?? '–'} · ${drink ?? '–'}`,
+    ).catch(() => {});
 
     return NextResponse.json({ success: true, result });
   } catch (error) {
