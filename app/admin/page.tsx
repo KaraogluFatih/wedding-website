@@ -789,12 +789,7 @@ export default function AdminPage() {
   const [authPw, setAuthPw] = useState(""); // kept in state for API headers
   const [activeTab, setActiveTab] = useState<Tab>("orders");
   const [pushState, setPushState] = useState<'unsupported' | 'checking' | 'subscribed' | 'unsubscribed'>('checking');
-  const [pushLogs, setPushLogs] = useState<string[]>([]);
-  function pushLog(msg: string) {
-    const line = `${new Date().toLocaleTimeString()} ${msg}`;
-    console.log('[Push]', msg);
-    setPushLogs(prev => [...prev.slice(-19), line]);
-  }
+
 
   // Restore session flag (not the password itself)
   useEffect(() => {
@@ -819,12 +814,9 @@ export default function AdminPage() {
 
   async function togglePush() {
     try {
-      pushLog(`togglePush called, state: ${pushState}`);
       const reg = await navigator.serviceWorker.ready;
-      pushLog(`SW ready, scope: ${reg.scope}`);
       if (pushState === 'subscribed') {
         const sub = await reg.pushManager.getSubscription();
-        pushLog(`Unsubscribing endpoint: ${sub?.endpoint ?? 'none'}`);
         await sub?.unsubscribe();
         await fetch('/api/admin/push/subscribe', {
           method: 'DELETE',
@@ -832,59 +824,48 @@ export default function AdminPage() {
           body: JSON.stringify({ endpoint: sub?.endpoint }),
         });
         setPushState('unsubscribed');
-        pushLog('Unsubscribed successfully');
       } else {
-        pushLog(`Notification.permission: ${Notification.permission}`);
         if (Notification.permission === 'denied') {
           alert('Bitte Benachrichtigungen in den Browsereinstellungen erlauben.');
           return;
         }
         if (Notification.permission !== 'granted') {
-          pushLog('Requesting permission...');
           const permission = await Notification.requestPermission();
-          pushLog(`Permission result: ${permission}`);
           if (permission !== 'granted') {
             alert('Benachrichtigungen wurden nicht erlaubt.');
             return;
           }
         }
         const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-        pushLog(`VAPID key: ${vapidKey ? vapidKey.slice(0, 20) + '...' : 'MISSING'}`);
         if (!vapidKey) {
           alert('Push-Konfiguration fehlt (VAPID key).');
           return;
         }
         const existingSub = await reg.pushManager.getSubscription();
-        pushLog(`Existing sub: ${existingSub ? existingSub.endpoint.slice(0, 40) + '...' : 'none'}`);
         if (existingSub) await existingSub.unsubscribe();
-        pushLog('Calling pushManager.subscribe()...');
         const sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           applicationServerKey: urlBase64ToUint8Array(vapidKey) as any,
         });
-        pushLog(`subscribe() result: ${sub ? sub.endpoint.slice(0, 40) + '...' : 'NULL'}`);
         if (!sub) {
           alert('Push-Abonnement konnte nicht erstellt werden. Bitte nochmal versuchen.');
           return;
         }
-        pushLog('Saving to DB...');
         const saveRes = await fetch('/api/admin/push/subscribe', {
           method: 'POST',
           headers: adminHeaders(authPw),
           body: JSON.stringify(sub),
         });
-        pushLog(`DB save status: ${saveRes.status}`);
         if (!saveRes.ok) {
           await sub.unsubscribe();
           alert('Abonnement konnte nicht in der Datenbank gespeichert werden. Bitte nochmal versuchen.');
           return;
         }
         setPushState('subscribed');
-        pushLog('Subscribed successfully ✓');
       }
     } catch (err) {
-      pushLog(`ERROR: ${err instanceof Error ? err.message : String(err)}`);
+      console.error('Push toggle error:', err);
       alert(`Push-Fehler: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
@@ -995,18 +976,6 @@ export default function AdminPage() {
             </button>
           </div>
         </div>
-        {/* Push debug log */}
-        {pushLogs.length > 0 && (
-          <div className="max-w-6xl mx-auto px-4 pb-2">
-            <div className="bg-gray-900 text-green-400 text-xs font-mono rounded-lg p-3 max-h-40 overflow-y-auto">
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-gray-400">Push Debug Log</span>
-                <button onClick={() => setPushLogs([])} className="text-gray-500 hover:text-white text-xs">clear</button>
-              </div>
-              {pushLogs.map((line, i) => <div key={i}>{line}</div>)}
-            </div>
-          </div>
-        )}
         {/* Tabs */}
         <div className="max-w-6xl mx-auto px-4 flex gap-1 pb-3 overflow-x-auto">
           {tabs.map(tab => (
