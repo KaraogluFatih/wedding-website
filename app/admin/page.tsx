@@ -828,9 +828,17 @@ export default function AdminPage() {
           alert('Bitte Benachrichtigungen in den Browsereinstellungen erlauben.');
           return;
         }
+        if (Notification.permission !== 'granted') {
+          const permission = await Notification.requestPermission();
+          if (permission !== 'granted') {
+            alert('Benachrichtigungen wurden nicht erlaubt.');
+            return;
+          }
+        }
         const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
         if (!vapidKey) {
-          alert('VAPID-Schlüssel fehlt. Bitte Dev-Server neu starten.');
+          console.error('VAPID key missing at runtime');
+          alert('Push-Konfiguration fehlt (VAPID key).');
           return;
         }
         // Clear any stale subscription before creating a new one
