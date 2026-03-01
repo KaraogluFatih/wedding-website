@@ -841,6 +841,10 @@ export default function AdminPage() {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           applicationServerKey: urlBase64ToUint8Array(vapidKey) as any,
         });
+        if (!sub) {
+          alert('Push-Abonnement konnte nicht erstellt werden. Bitte nochmal versuchen.');
+          return;
+        }
         const saveRes = await fetch('/api/admin/push/subscribe', {
           method: 'POST',
           headers: adminHeaders(authPw),
