@@ -833,6 +833,9 @@ export default function AdminPage() {
           alert('VAPID-Schlüssel fehlt. Bitte Dev-Server neu starten.');
           return;
         }
+        // Clear any stale subscription before creating a new one
+        const existingSub = await reg.pushManager.getSubscription();
+        if (existingSub) await existingSub.unsubscribe();
         const sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
